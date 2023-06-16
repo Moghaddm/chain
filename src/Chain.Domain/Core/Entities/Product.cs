@@ -2,21 +2,50 @@ namespace Chain.Domain.Core.Entities;
 
 public class Product : Entity
 {
-    public string Name { get; init; }
-    public string FullEnglishName { get; init; }
-    public string Description { get; init; }
+    public string Name { get; private set; }
+    public string FullEnglishName { get; private set; }
+    public string Description { get; private set; }
     public int Quantity { get; private set; }
     public long Price { get; private set; }
-    public Rate Rate { get; private set; }
-    public List<Comment> Comments { get; set; }
-    public List<Attachment> Attachments { get; set; }
-    public Company Company { get; set; }
+    public Rate Rate { get; }
+    public IReadOnlyList<Comment> Comments { get; }
+    public List<Attachment> Attachments { get; private set; }
+    public Company Company { get; private set; }
+    public double Suggest
+    {
+        get
+        {
+            return (double)Comments.TakeWhile(comment => comment.Suggest).Count()
+                * 100
+                / Comments.Count();
+        }
+    }
 
     public Product(
         string name,
         string fullEnglishName,
         string description,
         int price,
+        int quantity,
+        Company company
+    )
+    {
+        ValidateMainInformations(name, fullEnglishName, description, price, quantity, company);
+
+        Name = name;
+        Description = description;
+        FullEnglishName = fullEnglishName;
+        Price = price;
+        Quantity = quantity;
+        Company = new Company(company.Name);
+    }
+
+    private void ValidateMainInformations(
+        string name,
+        string fullEnglishName,
+        string description,
+        int price,
+        int quantity,
         Company company
     )
     {
@@ -28,7 +57,39 @@ public class Product : Entity
             throw new ArgumentNullException($"Invalid {nameof(fullEnglishName)}");
         if (price <= 0)
             throw new ArgumentException($"Invalid {nameof(price)}");
+        if (quantity <= 0)
+            throw new ArgumentException($"Invalid {nameof(quantity)}");
+    }
+
+    public void UpdateProduct(
+        string name,
+        string fullEnglishName,
+        string description,
+        int price,
+        int quantity,
+        Company company
+    )
+    {
+        ValidateMainInformations(name, fullEnglishName, description, price, quantity, company);
+
+        Name = name;
+        Description = description;
+        FullEnglishName = fullEnglishName;
+        Price = price;
+        Quantity = quantity;
         Company = new Company(company.Name);
+    }
+
+    public void AddAttachment(Func<Attachment, bool> validateAttachment, Attachment attachment)
+    {
+        validateAttachment = (attachment) =>
+        {
+            if (attachment is null)
+                throw new ArgumentException($"Invalid {nameof(attachment)}");
+            else
+                return true;
+        };
+        Attachments.Add(attachment);
     }
 
     public void IncreaseQuantity() => Quantity++;
