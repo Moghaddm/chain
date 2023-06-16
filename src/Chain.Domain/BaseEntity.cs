@@ -1,8 +1,12 @@
 namespace Chain.Domain;
-
-public abstract class Entity<T>
+public interface IEntity<TKey>
 {
-    public T Id { get; set; }
+    TKey Id { get; }
+}
+
+public abstract class Entity<T> : IEntity<T>
+{
+    public T Id { get; private set; }
 }
 
 public class Entity : Entity<long> { }
