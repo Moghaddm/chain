@@ -8,4 +8,5 @@ public class Company : Entity
             throw new ArgumentNullException("Invaild Name Company.");
         Name = name;
     }
+    public List<Product> Products { get; set; }
 }
