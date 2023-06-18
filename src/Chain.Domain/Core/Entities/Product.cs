@@ -1,6 +1,6 @@
 namespace Chain.Domain.Core.Entities;
 
-public class Product : Entity
+public sealed class Product : Entity
 {
     public string Name { get; private set; }
     public string FullEnglishName { get; private set; }

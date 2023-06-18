@@ -1,6 +1,6 @@
 namespace Chain.Domain.Core.Entities;
 
-public class Category : Entity
+public sealed class Category : Entity
 {
     public string Title { get; set; }
     public int LimitOrder { get; private set; }

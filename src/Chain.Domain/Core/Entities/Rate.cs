@@ -1,12 +1,13 @@
 namespace Chain.Domain.Core.Entities;
 
-public class Rate : Entity
+public sealed class Rate : Entity
 {
     public decimal One { get; private set; }
     public decimal Two { get; private set; }
     public decimal Three { get; private set; }
     public decimal Four { get; private set; }
     public decimal Five { get; private set; }
+    public List<Feedback> Feedbacks { get; private set; }
     public Rate Percents
     {
         get =>

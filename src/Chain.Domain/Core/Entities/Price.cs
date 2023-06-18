@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chain.Domain.Core.Entities
 {
-    public class Price
+    public sealed class Price
     {
         public long Tuman { get; private set; }
         public long Rial { get; private set; }
