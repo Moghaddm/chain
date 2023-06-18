@@ -6,11 +6,12 @@ public class Product : Entity
     public string FullEnglishName { get; private set; }
     public string Description { get; private set; }
     public int Quantity { get; private set; }
-    public long Price { get; private set; }
+    public Price Price { get; private set; }
     public Rate Rate { get; }
     public IReadOnlyList<Comment> Comments { get; }
     public List<Attachment> Attachments { get; private set; }
     public Company Company { get; private set; }
+    public Category Category { get; private set; }
     public double Suggest
     {
         get
@@ -25,12 +26,13 @@ public class Product : Entity
         string name,
         string fullEnglishName,
         string description,
-        int price,
+        Price price,
         int quantity,
-        Company company
+        Company company,
+        Category category
     )
     {
-        ValidateMainInformations(name, fullEnglishName, description, price, quantity, company);
+        ValidateMainInformations(name, fullEnglishName, description, quantity);
 
         Name = name;
         Description = description;
@@ -38,15 +40,14 @@ public class Product : Entity
         Price = price;
         Quantity = quantity;
         Company = new Company(company.Name);
+        Category = category;
     }
 
     private void ValidateMainInformations(
         string name,
         string fullEnglishName,
         string description,
-        int price,
-        int quantity,
-        Company company
+        int quantity
     )
     {
         if (String.IsNullOrEmpty(name))
@@ -55,8 +56,6 @@ public class Product : Entity
             throw new ArgumentNullException($"Invalid {nameof(description)}");
         if (String.IsNullOrEmpty(fullEnglishName))
             throw new ArgumentNullException($"Invalid {nameof(fullEnglishName)}");
-        if (price <= 0)
-            throw new ArgumentException($"Invalid {nameof(price)}");
         if (quantity <= 0)
             throw new ArgumentException($"Invalid {nameof(quantity)}");
     }
@@ -65,12 +64,13 @@ public class Product : Entity
         string name,
         string fullEnglishName,
         string description,
-        int price,
+        Price price,
         int quantity,
-        Company company
+        Company company,
+        Category category
     )
     {
-        ValidateMainInformations(name, fullEnglishName, description, price, quantity, company);
+        ValidateMainInformations(name, fullEnglishName, description, quantity);
 
         Name = name;
         Description = description;
@@ -78,6 +78,7 @@ public class Product : Entity
         Price = price;
         Quantity = quantity;
         Company = new Company(company.Name);
+        Category = category;
     }
 
     public void AddAttachment(Func<Attachment, bool> validateAttachment, Attachment attachment)
