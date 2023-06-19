@@ -1,6 +1,6 @@
 namespace Chain.Domain.Core.Entities;
 
-public class Attachment
+public sealed class Attachment
 {
     public byte[]? Image { get; set; }
     public string? Alt { get; set; }

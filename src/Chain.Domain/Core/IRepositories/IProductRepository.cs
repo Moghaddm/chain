@@ -2,8 +2,8 @@ using Chain.Domain.Core.Entities;
 
 namespace Chain.Domain.IRepositories.Core;
 
-public interface IProductRepository
+public interface IProductRepository : IRepository<Product>
 {
-    ValueTask<List<Product>> GetProducts();
-    ValueTask<Product> GetProduct(int id);
+    ValueTask UpdateProduct(long id, Product product);
+    ValueTask RemoveProduct(long id);
 }
