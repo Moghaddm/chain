@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "zhdCbXTLDPTtOb/WwVs+pfWyL2m7gBCjqT1DVX4rs4cFSWfQQTsmfTl2DidhewFWNMYQr3txfE9bFCLTkUJ74w==",
+  "dgSpecHash": "pGn9v+NH9fT4EpJKpf2RSgT0XMWucaucPlORcw2ZUpM5NuWyah9yA1FcYWk+oNGE0d+t7PiXYsJ4LxMNZ9d6Iw==",
   "success": true,
-  "projectFilePath": "F:\\MyProjects\\Chain\\src\\Chain.Application\\Chain.Application.csproj",
+  "projectFilePath": "C:\\Moghaddam\\Projects\\Chain\\src\\Chain.Application\\Chain.Application.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }
