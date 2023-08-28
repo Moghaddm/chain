@@ -475,3 +475,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/src/.vs/Chain/v17/.suo
+/src/.vs/Chain/DesignTimeBuild/.dtbcache.v2
+/src/.vs/Chain/v17/.futdcache.v2
