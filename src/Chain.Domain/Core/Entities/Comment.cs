@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace Chain.Domain.Core.Entities;
 
-public class Comment : Entity
+public sealed class Comment : Entity
 {
     public string Gmail { get; private set; }
     public string WriterAlias { get; private set; }
