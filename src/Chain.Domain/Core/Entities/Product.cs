@@ -56,6 +56,8 @@ public sealed class Product : Entity
             throw new ArgumentNullException($"Invalid {nameof(description)}");
         if (String.IsNullOrEmpty(fullEnglishName))
             throw new ArgumentNullException($"Invalid {nameof(fullEnglishName)}");
+        if (price <= 0)
+            throw new ArgumentException($"Invalid {nameof(price)}");
         if (quantity <= 0)
             throw new ArgumentException($"Invalid {nameof(quantity)}");
     }
