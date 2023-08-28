@@ -1,16 +1,16 @@
 namespace Chain.Domain.Core.Entities;
 
-public class Product : Entity
+public sealed class Product : Entity
 {
     public string Name { get; private set; }
     public string FullEnglishName { get; private set; }
     public string Description { get; private set; }
     public int Quantity { get; private set; }
-    public long Price { get; private set; }
     public Rate Rate { get; }
     public IReadOnlyList<Comment> Comments { get; }
     public List<Attachment> Attachments { get; private set; }
     public Company Company { get; private set; }
+    public Category Category { get; private set; }
     public double Suggest
     {
         get
@@ -31,6 +31,13 @@ public class Product : Entity
     )
     {
         ValidateMainInformations(name, fullEnglishName, description, price, quantity, company);
+        Price price,
+        int quantity,
+        Company company,
+        Category category
+    )
+    {
+        ValidateMainInformations(name, fullEnglishName, description, quantity);
 
         Name = name;
         Description = description;
@@ -38,6 +45,7 @@ public class Product : Entity
         Price = price;
         Quantity = quantity;
         Company = new Company(company.Name);
+        Category = category;
     }
 
     private void ValidateMainInformations(
@@ -47,6 +55,7 @@ public class Product : Entity
         int price,
         int quantity,
         Company company
+        int quantity
     )
     {
         if (String.IsNullOrEmpty(name))
@@ -71,6 +80,13 @@ public class Product : Entity
     )
     {
         ValidateMainInformations(name, fullEnglishName, description, price, quantity, company);
+        Price price,
+        int quantity,
+        Company company,
+        Category category
+    )
+    {
+        ValidateMainInformations(name, fullEnglishName, description, quantity);
 
         Name = name;
         Description = description;
@@ -78,6 +94,19 @@ public class Product : Entity
         Price = price;
         Quantity = quantity;
         Company = new Company(company.Name);
+        Category = category;
+    }
+
+    public void AddAttachment(Func<Attachment, bool> validateAttachment, Attachment attachment)
+    {
+        validateAttachment = (attachment) =>
+        {
+            if (attachment is null)
+                throw new ArgumentException($"Invalid {nameof(attachment)}");
+            else
+                return true;
+        };
+        Attachments.Add(attachment);
     }
 
     public void AddAttachment(Func<Attachment, bool> validateAttachment, Attachment attachment)

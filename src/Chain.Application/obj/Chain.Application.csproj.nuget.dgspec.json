@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "F:\\MyProjects\\Chain\\src\\Chain.Application\\Chain.Application.csproj": {}
+    "C:\\Moghaddam\\Projects\\Chain\\src\\Chain.Application\\Chain.Application.csproj": {}
   },
   "projects": {
-    "F:\\MyProjects\\Chain\\src\\Chain.Application\\Chain.Application.csproj": {
+    "C:\\Moghaddam\\Projects\\Chain\\src\\Chain.Application\\Chain.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\MyProjects\\Chain\\src\\Chain.Application\\Chain.Application.csproj",
+        "projectUniqueName": "C:\\Moghaddam\\Projects\\Chain\\src\\Chain.Application\\Chain.Application.csproj",
         "projectName": "Chain.Application",
-        "projectPath": "F:\\MyProjects\\Chain\\src\\Chain.Application\\Chain.Application.csproj",
-        "packagesPath": "C:\\Users\\Mohammad\\.nuget\\packages\\",
-        "outputPath": "F:\\MyProjects\\Chain\\src\\Chain.Application\\obj\\",
+        "projectPath": "C:\\Moghaddam\\Projects\\Chain\\src\\Chain.Application\\Chain.Application.csproj",
+        "packagesPath": "C:\\Users\\Dev\\.nuget\\packages\\",
+        "outputPath": "C:\\Moghaddam\\Projects\\Chain\\src\\Chain.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Mohammad\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Dev\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -55,7 +55,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.307\\RuntimeIdentifierGraph.json"
         }
       }
     }
