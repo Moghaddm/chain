@@ -2,9 +2,9 @@ namespace Chain.Domain.Entities.Core;
 
 public sealed class Attachment
 {
-    public byte[]? Image { get; set; }
-    public string? Alt { get; set; }
-    public string? ImageTitle { get; set; }
+    public byte[]? Image { get; private set; }
+    public string? Alt { get; private set; }
+    public string? ImageTitle { get; private set; }
     public string PropertyName { get; private set; }
     public List<string> PropertyValue { get; private set; }
 
@@ -62,5 +62,5 @@ public sealed class Attachment
         }
     }
 
-    public Product Product { get; set; }
+    public Product Product { get; }
 }

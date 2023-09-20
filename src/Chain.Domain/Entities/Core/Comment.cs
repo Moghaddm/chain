@@ -9,8 +9,8 @@ public sealed class Comment : Entity
     public string WriterAlias { get; private set; }
     public string Description { get; private set; }
     public bool Suggest { get; private set; }
-    public int VoteUps { get; set; }
-    public int VoteDowns { get; set; }
+    public int VoteUps { get; private set; }
+    public int VoteDowns { get; private set; }
     public DateTimeOffset DateTimeCommented { get; private set; }
 
     public void AddComment(

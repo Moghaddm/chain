@@ -2,7 +2,7 @@ namespace Chain.Domain.Entities.Core;
 
 public sealed class Category : Entity
 {
-    public string Title { get; set; }
+    public string Title { get; private set; }
     public int LimitOrder { get; private set; }
 
     public Category(string title, int limitOrder)

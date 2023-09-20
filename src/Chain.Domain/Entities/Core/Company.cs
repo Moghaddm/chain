@@ -2,7 +2,7 @@ namespace Chain.Domain.Entities.Core;
 
 public sealed class Company : Entity
 {
-    public string Name { get; set; }
+    public string Name { get; private set; }
     public Company(string name)
     {
         if (string.IsNullOrWhiteSpace(name))

@@ -6,9 +6,6 @@ public sealed class Product : Entity
     public string FullEnglishName { get; private set; }
     public string Description { get; private set; }
     public int Quantity { get; private set; }
-    public Rate Rate { get; }
-    public IReadOnlyList<Comment> Comments { get; }
-    public List<Attachment> Attachments { get; private set; }
     public Company Company { get; private set; }
     public Category Category { get; private set; }
     public double Suggest
@@ -18,6 +15,9 @@ public sealed class Product : Entity
                 / Comments.Count();
     }
     public long Price { get; private set; }
+    public Rate Rate { get; }
+    public List<Attachment> Attachments { get; private set; }
+    public IReadOnlyList<Comment> Comments { get; }
 
     public Product(
         string name,
