@@ -1,7 +1,7 @@
 using Chain.Domain.Enums;
 using System.Xml.Linq;
 
-namespace Chain.Domain.Entities.Core;
+namespace Chain.Domain.Entities;
 
 public sealed class Comment : Entity
 {

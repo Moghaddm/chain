@@ -1,5 +1,4 @@
-namespace Chain.Domain.Entities.Core;
-
+namespace Chain.Domain.Entities;
 public sealed class Product : Entity
 {
     public string Name { get; private set; }
@@ -23,7 +22,7 @@ public sealed class Product : Entity
         string name,
         string fullEnglishName,
         string description,
-        int price,
+        long price,
         int quantity,
         Company company,
         Category category
@@ -43,8 +42,8 @@ public sealed class Product : Entity
             string name,
             string fullEnglishName,
             string description,
-            int price,
-            int quantity,
+            long price,
+            long quantity,
             Company company
         )
     {
@@ -65,7 +64,7 @@ public sealed class Product : Entity
         string name,
         string fullEnglishName,
         string description,
-        int price,
+        long price,
         int quantity,
         Company company,
         Category category

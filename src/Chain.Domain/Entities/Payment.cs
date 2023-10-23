@@ -1,4 +1,4 @@
-namespace Chain.Domain.Entities.Cart;
+namespace Chain.Domain.Entities;
 public sealed class Payment : Entity
 {
 

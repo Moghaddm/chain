@@ -1,7 +1,6 @@
-using Chain.Domain.Entities.Core;
 using System;
 
-namespace Chain.Domain.Entities.Cart;
+namespace Chain.Domain.Entities;
 
 public sealed class Order : Entity
 {

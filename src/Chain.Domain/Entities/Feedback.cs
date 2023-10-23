@@ -1,4 +1,4 @@
-namespace Chain.Domain.Entities.Core;
+namespace Chain.Domain.Entities;
 public sealed class Feedback : Entity
 {
     public string Message { get; set; }
