@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <PackageReference Include="MongoDB.Driver" Version="2.22.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Chain.Application.Contract\Chain.Application.Contract.csproj" />
+    <ProjectReference Include="..\Chain.Domain\Chain.Domain.csproj" />
   </ItemGroup>
 
 </Project>
