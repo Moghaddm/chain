@@ -7,16 +7,16 @@ public sealed class Product : Entity
     public int Quantity { get; private set; }
     public Company Company { get; private set; }
     public Category Category { get; private set; }
-    public double Suggest
+    public double SuggestPercent
     {
-        get => (double)Comments.TakeWhile(comment => comment.Suggest).Count()
-                * 100
-                / Comments.Count();
+        get => (double)Comments
+                   .TakeWhile(comment => comment.Suggest)
+                   .Count() * 100 / Comments.Count();
     }
     public long Price { get; private set; }
-    public Rate Rate { get; }
+
     public List<Attachment> Attachments { get; private set; }
-    public IReadOnlyList<Comment> Comments { get; }
+    public IEnumerable<Comment> Comments { get; private set; }
 
     public Product(
         string name,
@@ -25,10 +25,12 @@ public sealed class Product : Entity
         long price,
         int quantity,
         Company company,
-        Category category
+        Category category,
+        List<Attachment> attachments
     )
     {
-        ValidateMainInformations(name, fullEnglishName, description, price, quantity, company);
+        ValidateMainInformation(name, fullEnglishName, description, price, quantity, company);
+
         Name = name;
         FullEnglishName = fullEnglishName;
         Description = description;
@@ -36,9 +38,11 @@ public sealed class Product : Entity
         Quantity = quantity;
         Company = company;
         Category = category;
+        Comments = Enumerable.Empty<Comment>();
+        Attachments = attachments;
     }
 
-    private void ValidateMainInformations(
+    private void ValidateMainInformation(
             string name,
             string fullEnglishName,
             string description,
@@ -55,8 +59,9 @@ public sealed class Product : Entity
             throw new ArgumentNullException($"Invalid {nameof(fullEnglishName)}");
         if (price <= 0)
             throw new ArgumentException($"Invalid {nameof(price)}");
-        if (quantity <= 0)
+        if (quantity < 0)
             throw new ArgumentException($"Invalid {nameof(quantity)}");
+
         _ = company ?? throw new ArgumentNullException();
     }
 
@@ -70,7 +75,7 @@ public sealed class Product : Entity
         Category category
     )
     {
-        ValidateMainInformations(name, fullEnglishName, description, price, quantity, company);
+        ValidateMainInformation(name, fullEnglishName, description, price, quantity, company);
 
         Name = name;
         Description = description;
@@ -81,22 +86,18 @@ public sealed class Product : Entity
         Category = category;
     }
 
-
     public void AddAttachment(Attachment attachment)
     {
-        Func<Attachment, bool> validateAttachment = (attachment) =>
-        {
-            if (attachment is null)
-                throw new ArgumentException($"Invalid {nameof(attachment)}");
-            else
-                return true;
-        };
-
-        validateAttachment(attachment);
+        ValidateAttachment(attachment);
 
         Attachments.Add(attachment);
     }
 
-    public void IncreaseQuantity() => Quantity++;
-    public void DecreaseQuantity() => Quantity--;
+    private Func<Attachment, bool> ValidateAttachment = (attachment) =>
+    {
+        if (attachment is null)
+            throw new ArgumentException($"Invalid {nameof(attachment)}");
+        else
+            return true;
+    };
 }

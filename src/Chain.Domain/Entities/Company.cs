@@ -7,6 +7,7 @@ public sealed class Company : Entity
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentNullException("Invaild Name Company.");
+
         Name = name;
     }
     public List<Product> Products { get; set; }

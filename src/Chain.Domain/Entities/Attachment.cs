@@ -29,6 +29,7 @@ public sealed class Attachment
     {
         if (string.IsNullOrEmpty(propertyName))
             throw new ArgumentNullException($"Invalid {nameof(propertyName)}");
+
         ValidateValues(propertyValue);
         PropertyName = propertyName;
         PropertyValue = propertyValue;
@@ -50,17 +51,14 @@ public sealed class Attachment
             throw new ArgumentNullException($"Invalid {nameof(alt)}.");
         if (string.IsNullOrEmpty(imageTitle))
             throw new ArgumentNullException($"Invalid {nameof(imageTitle)}.");
+
         ValidateValues(propertyValue);
     }
 
     private void ValidateValues(List<string> values)
     {
         foreach (var value in values)
-        {
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentNullException("Invalid Value");
-        }
     }
-
-    public Product Product { get; }
 }

@@ -10,6 +10,7 @@ namespace Chain.Domain.Entities
     {
         public long Tuman { get; private set; }
         public long Rial { get; private set; }
+
         public Price(long tuman, long rial)
         {
             if (Tuman <= 0)

@@ -14,6 +14,4 @@ public sealed class Category : Entity
         Title = title;
         LimitOrder = limitOrder;
     }
-    public List<Product> Products { get; }
-    public List<Company> Companies { get; }
 }

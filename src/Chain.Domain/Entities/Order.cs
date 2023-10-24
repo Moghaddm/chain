@@ -9,9 +9,7 @@ public sealed class Order : Entity
     public int Quantity { get; private set; }
     public int LimitOrder { get; private set; }
     public bool IsEmpty
-    {
-        get => Product.Quantity == 0;
-    }
+        => Product.Quantity == 0;
 
     public async Task AddOrder(DateTimeOffset dateOrdered, Price price, int limitOrder)
     {
