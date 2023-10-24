@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Chain.Application.Contract.Ports.Repositories;
 using Chain.Domain;
 using Chain.Domain.Entities;
+using Chain.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -22,7 +23,6 @@ namespace Chain.Infrastructure.Persistence
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
-        public virtual DbSet<Feedback> Feedbacks { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Rate> Rates { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -55,15 +55,34 @@ namespace Chain.Infrastructure.Persistence
 
         public async override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            foreach (var entry in ChangeTracker.Entries<Entity<Guid>>())
-                if (entry
-                        .OriginalValues
-                        .Properties
-                        .FirstOrDefault(p => p.Name == nameof(Entity<Guid>.ConcurrencyStamp)) != entry
-                        .CurrentValues
-                        .Properties
-                        .FirstOrDefault(p => p.Name == nameof(Entity<Guid>.ConcurrencyStamp)))
-                    throw new InvalidOperationException("Your have data is changed. please refresh the page and get it again!");
+            var cancellationTokenSource = new CancellationTokenSource();
+            cancellationToken = cancellationTokenSource.Token;
+
+            try
+            {
+                foreach (var entry in ChangeTracker.Entries<Entity<Guid>>())
+                {
+                    if (entry
+                            .OriginalValues
+                            .Properties
+                            .FirstOrDefault(p => p.Name == nameof(Entity<Guid>.ConcurrencyStamp)) != entry
+                            .CurrentValues
+                            .Properties
+                            .FirstOrDefault(p => p.Name == nameof(Entity<Guid>.ConcurrencyStamp)))
+                        throw new InvalidOperationException(
+                            "Your have data is changed. please refresh the page and get it again!");
+
+                    entry.Entity.ConcurrencyStamp = Guid.NewGuid();
+                }
+            }
+            catch (Exception exception)
+            {
+                cancellationTokenSource.Cancel();
+
+                Console.WriteLine(exception);
+
+                throw;
+            }
 
             return await base.SaveChangesAsync(cancellationToken);
         }

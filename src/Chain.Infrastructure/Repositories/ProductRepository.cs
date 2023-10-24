@@ -7,6 +7,7 @@ using Chain.Application.Contract.Ports.Repositories;
 using Chain.Application.Contract.Ports.Services;
 using Chain.Domain.Entities;
 using Chain.Infrastructure.Persistence;
+using Chain.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
 using ZstdSharp.Unsafe;
@@ -28,14 +29,14 @@ namespace Chain.Persistence.Repositories
             return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
         }
 
-        public async ValueTask RemoveProduct(Product product)
+        public async Task RemoveAsync(Product product)
         {
             var filter = Builders<Product>.Filter.Eq(p => p, product);
 
             await _context.Products.DeleteOneAsync(filter);
         }
 
-        public async ValueTask<Guid> CreateAsync(Product product)
+        public async Task<Guid> CreateAsync(Product product)
         {
             await _context.Products.InsertOneAsync(product);
 
@@ -49,29 +50,14 @@ namespace Chain.Persistence.Repositories
             return product == null ? null : await product.FirstOrDefaultAsync();
         }
 
-        public async ValueTask<List<Product?>> GetAsync()
+        public async ValueTask<IList<Product?>> GetAsync()
             => _context.Products.FindAsync(_ => true).Result.ToList()!;
     }
 
-    public class ProductEfRepository : IProductRepository
+    public class ProductEfRepository : BasicRepository<Product, Guid, ChainDbContext>, IProductRepository
     {
-        private readonly DbSet<Product> _products;
-
-        public ProductEfRepository(ChainDbContext context)
-            => _products = context.Set<Product>();
-
-        public async ValueTask RemoveProduct(Product product) => _products.Remove(product);
-
-        public async ValueTask<Guid> CreateAsync(Product product)
+        public ProductEfRepository(ChainDbContext context) : base(context)
         {
-            var addedProduct = await _products.AddAsync(product);
-
-            return addedProduct.Entity.Id;
         }
-
-        public async ValueTask<Product?> GetByIdAsync(Guid id)
-            => await _products.FirstOrDefaultAsync(p => p.Id == id);
-
-        public async ValueTask<List<Product?>> GetAsync() => await _products.ToListAsync();
     }
 }
