@@ -1,4 +1,5 @@
-﻿using Chain.Application.Interfaces;
+﻿using Chain.Application.Contract.Models.Api;
+using Chain.Application.Interfaces;
 using Chain.Application.Models;
 using Chain.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -22,9 +23,9 @@ namespace Chain.Api.Controllers
         }
 
         [HttpPost("[action]", Name = nameof(Create))]
-        public async Task<IActionResult> Create([FromBody] ProductDto product)
+        public async Task<IActionResult> Create([FromBody] ProductCreateRequest input)
         {
-            var productAdded = await _productService.Create(product);
+            var productAdded = await _productService.Create(input.Product,input.CompanyId,input.CategoryId);
 
             return CreatedAtAction(nameof(GetById), productAdded);
         }
