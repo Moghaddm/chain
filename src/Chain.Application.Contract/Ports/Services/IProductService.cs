@@ -9,10 +9,12 @@ namespace Chain.Application.Interfaces
 {
     public interface IProductService
     {
-        Task<Guid> Create(ProductDto productDto,Guid companyId,Guid categoryId);
+        Task<Guid> Create(CreateEditProductDto createProductDto);
         ValueTask<List<ProductDto>> GetAll();
         ValueTask<OneProductDto> GetById(Guid id);
         Task Delete(Guid id);
-        Task Update(Guid id, OneProductDto productDto);
+        Task Update(Guid id, CreateEditProductDto editProductDto);
+        Task UpdateCompany(Guid id, Guid companyId);
+        Task UpdateCategory(Guid id, Guid categoryId);
     }
 }

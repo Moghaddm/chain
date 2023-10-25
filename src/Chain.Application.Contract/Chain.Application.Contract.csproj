@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Chain.Domain\Chain.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Api\" />
+  </ItemGroup>
+
 </Project>
