@@ -1,8 +1,10 @@
+using Chain.Application.Contract.Ports.Repositories;
+using Chain.Application.Contract.Ports.Services;
 using Chain.Application.Interfaces;
-using Chain.Application.Interfaces.Data;
-using Chain.Application.Interfaces.Repositories;
-using Chain.Infrastructure.Services;
-using Chain.Persistence.Data.Products;
+using Chain.Application.Services;
+using Chain.Infrastructure.Persistence;
+using Chain.Infrastructure.Persistence.Products;
+using Chain.Infrastructure.Repositories;
 using Chain.Persistence.Repositories;
 using Microsoft.Extensions.Configuration;
 
@@ -15,11 +17,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<ChainDbContext>();
+
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
-builder.Services.AddScoped<IProductContext, ProductMongoContext>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IUnitOfWork, ChainDbContext>();
+
+builder.Services.AddTransient<IProductRepository, ProductEfRepository>();
+builder.Services.AddTransient<ICompanyRepository, CompanyRepository>();
+builder.Services.AddTransient<ICommentRepository, CommentRepository>();
+builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
+
+
+builder.Services.AddTransient<ICommentService, CommentService>();
+builder.Services.AddTransient<IProductService, ProductService>();
 
 var app = builder.Build();
 
