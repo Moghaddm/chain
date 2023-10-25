@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chain.Application.Contract.Ports.Repositories;
+using Chain.Application.Contract.Ports.Services;
 using Chain.Domain;
 using Chain.Domain.Entities;
 using Chain.Domain.Models;
@@ -23,8 +24,7 @@ namespace Chain.Infrastructure.Persistence
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
-        public virtual DbSet<Rate> Rates { get; set; }
+        //public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -74,6 +74,8 @@ namespace Chain.Infrastructure.Persistence
 
                     entry.Entity.ConcurrencyStamp = Guid.NewGuid();
                 }
+
+                return await base.SaveChangesAsync(cancellationToken);
             }
             catch (Exception exception)
             {
@@ -83,8 +85,6 @@ namespace Chain.Infrastructure.Persistence
 
                 throw;
             }
-
-            return await base.SaveChangesAsync(cancellationToken);
         }
     }
 }
