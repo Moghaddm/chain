@@ -13,9 +13,9 @@ namespace Chain.Application.Services
 {
     public class CommentService : ICommentService
     {
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ICommentRepository _commentRepository;
         private readonly IProductRepository _productRepository;
-        private readonly IUnitOfWork _unitOfWork;
 
         public CommentService(
             IProductRepository productRepository,
