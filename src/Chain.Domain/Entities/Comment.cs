@@ -15,6 +15,11 @@ public sealed class Comment : Entity
     public int VoteDowns { get; private set; }
     public RateNumber RateNumber { get; private set; }
 
+    private Comment()
+    {
+        
+    }
+
     public Comment(
         string writerAlias,
         string title,

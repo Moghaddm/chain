@@ -9,14 +9,19 @@ public sealed class Product : Entity
     public Category Category { get; private set; }
     public double SuggestPercent
     {
+        private set { SuggestPercent = value; }
         get => (double)Comments
                    .TakeWhile(comment => comment.Suggest)
                    .Count() * 100 / Comments.Count();
     }
     public long Price { get; private set; }
+    private Product()
+    {
+
+    }
 
     public List<Attachment> Attachments { get; private set; }
-    public IEnumerable<Comment> Comments { get; private set; }
+    public List<Comment> Comments { get; private set; }
 
     public Product(
         string name,
@@ -29,7 +34,7 @@ public sealed class Product : Entity
         List<Attachment> attachments
     )
     {
-        ValidateMainInformation(name, fullEnglishName, description, price, quantity, company);
+        ValidateMainInformation(name, fullEnglishName, description, price, quantity);
 
         Name = name;
         FullEnglishName = fullEnglishName;
@@ -38,7 +43,7 @@ public sealed class Product : Entity
         Quantity = quantity;
         Company = company;
         Category = category;
-        Comments = Enumerable.Empty<Comment>();
+        Comments = Enumerable.Empty<Comment>().ToList();
         Attachments = attachments;
     }
 
@@ -47,8 +52,7 @@ public sealed class Product : Entity
             string fullEnglishName,
             string description,
             long price,
-            long quantity,
-            Company company
+            long quantity
         )
     {
         if (string.IsNullOrEmpty(name))
@@ -61,8 +65,21 @@ public sealed class Product : Entity
             throw new ArgumentException($"Invalid {nameof(price)}");
         if (quantity < 0)
             throw new ArgumentException($"Invalid {nameof(quantity)}");
+    }
 
-        _ = company ?? throw new ArgumentNullException();
+
+    public void UpdateCategory(Category category)
+    {
+        _ = category ?? throw new ArgumentNullException($"{nameof(category)} for update cannot be null.");
+
+        Category = category;
+    }
+
+    public void UpdateCompany(Company company)
+    {
+        _ = company ?? throw new ArgumentNullException($"{nameof(company)} for update cannot be null.");
+
+        Company = company;
     }
 
     public void UpdateProduct(
@@ -70,20 +87,16 @@ public sealed class Product : Entity
         string fullEnglishName,
         string description,
         long price,
-        int quantity,
-        Company company,
-        Category category
+        int quantity
     )
     {
-        ValidateMainInformation(name, fullEnglishName, description, price, quantity, company);
+        ValidateMainInformation(name, fullEnglishName, description, price, quantity);
 
         Name = name;
         Description = description;
         FullEnglishName = fullEnglishName;
         Price = price;
         Quantity = quantity;
-        Company = new Company(company.Name);
-        Category = category;
     }
 
     public void AddAttachment(Attachment attachment)

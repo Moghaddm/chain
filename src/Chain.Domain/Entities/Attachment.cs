@@ -2,6 +2,11 @@ namespace Chain.Domain.Entities;
 
 public sealed class Attachment
 {
+    private Attachment()
+    {
+        
+    }
+
     public byte[]? Image { get; private set; }
     public string? Alt { get; private set; }
     public string? ImageTitle { get; private set; }

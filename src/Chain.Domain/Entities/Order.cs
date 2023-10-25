@@ -11,6 +11,11 @@ public sealed class Order : Entity
     public bool IsEmpty
         => Product.Quantity == 0;
 
+    private Order()
+    {
+        
+    }
+
     public async Task AddOrder(DateTimeOffset dateOrdered, Price price, int limitOrder)
     {
         if (limitOrder < 1)
