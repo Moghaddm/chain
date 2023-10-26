@@ -9,13 +9,14 @@ using Chain.Application.Contract.Ports.Services;
 using Chain.Application.Interfaces;
 using Chain.Application.Models;
 using Chain.Domain.Entities;
+using Chain.Domain.Services;
 
 namespace Chain.Application.Services
 {
     public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICommentService _commentService;
+        private readonly ICommentRepository _commentRepository;
         private readonly ICompanyRepository _companyRepository;
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
@@ -25,9 +26,9 @@ namespace Chain.Application.Services
             IUnitOfWork unitOfWork,
             ICategoryRepository categoryRepository,
             ICompanyRepository companyRepository,
-            ICommentService commentService)
-            => (_productRepository, _unitOfWork, _categoryRepository, _companyRepository, _commentService)
-                = (productRepository, unitOfWork, categoryRepository, companyRepository, commentService);
+            ICommentRepository commentRepository)
+            => (_productRepository, _unitOfWork, _categoryRepository, _companyRepository, _commentRepository)
+                = (productRepository, unitOfWork, categoryRepository, companyRepository, commentRepository);
 
         public async Task<Guid> Create(CreateEditProductDto createProductDto)
         {
@@ -76,9 +77,11 @@ namespace Chain.Application.Services
 
         public async ValueTask<OneProductDto> GetById(Guid id)
         {
+            var rateService = new RateService();
+
             var product = await _productRepository.GetByIdAsync(id);
 
-            var comments = await _commentService.GetProductComments(id);
+            var comments = product.Comments;
 
             var productDto = new OneProductDto(
                 product.Name,
@@ -86,9 +89,19 @@ namespace Chain.Application.Services
                 product.Description,
                 product.Quantity,
                 product.Price,
+                new RateModel(rateService.GetAverageRate(comments), rateService.GetPercentRateNumbers(comments)),
                 new CompanyDto(product.Company.Name),
                 new CategoryDto(product.Category.Title, product.Category.LimitOrder),
-                comments,
+                comments.Select(c => new CommentDto(
+                c.WriterAlias,
+                c.Title,
+                c.Description,
+                c.Gmail,
+                c.DateTimeCommented,
+                c.Suggest,
+                c.VoteUps,
+                c.VoteDowns,
+                c.RateNumber)),
                 product.Attachments);
 
             return productDto;

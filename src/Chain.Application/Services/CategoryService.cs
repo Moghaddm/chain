@@ -49,21 +49,11 @@ namespace Chain.Application.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async ValueTask<CategoryShowProductsDto> Get(Guid id)
+        public async ValueTask<CategoryDto> Get(Guid id)
         {
             var category = await _categoryRepository.GetByIdAsync(id);
 
-            var productsDto = category.Products.Select(c => new ProductDto(
-                c.Name,
-                c.FullEnglishName,
-                c.Description,
-                c.Quantity,
-                c.Price,
-                new CompanyDto(c.Company.Name),
-                new CategoryDto(c.Category.Title, c.Category.LimitOrder),
-                c.Attachments));
-
-            return new CategoryShowProductsDto(category.Title, category.LimitOrder, productsDto);
+            return new CategoryDto(category.Title,category.LimitOrder);
         }
 
         public async ValueTask<IEnumerable<CategoryDto>> GetAll()
