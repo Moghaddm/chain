@@ -9,9 +9,9 @@ using Chain.Infrastructure.Persistence;
 
 namespace Chain.Infrastructure.Repositories
 {
-    public class CategoryRepository : BasicRepository<Category,Guid,ChainDbContext> , ICategoryRepository
+    public class CategoryRepository : BasicRepository<Category,Guid> , ICategoryRepository
     {
-        public CategoryRepository(ChainDbContext context) : base(context)
+        public CategoryRepository(IUnitOfWork context) : base(context)
         {
         }
     }

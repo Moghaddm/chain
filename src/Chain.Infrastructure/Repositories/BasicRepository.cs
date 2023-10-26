@@ -9,13 +9,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Chain.Infrastructure.Repositories
 {
-    public class BasicRepository<TEntity, TKey, TContext> : IBasicRepository<TEntity, TKey>
+    public class BasicRepository<TEntity, TKey> : IBasicRepository<TEntity, TKey>
         where TEntity : Entity<TKey>
-        where TContext : DbContext
     {
         private readonly DbSet<TEntity> _entities;
 
-        public BasicRepository(TContext context)
+        public BasicRepository(IUnitOfWork context)
             => _entities = context.Set<TEntity>();
 
         public async Task RemoveAsync(TEntity entity)

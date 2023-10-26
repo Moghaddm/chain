@@ -54,9 +54,9 @@ namespace Chain.Persistence.Repositories
             => _context.Products.FindAsync(_ => true).Result.ToList()!;
     }
 
-    public class ProductEfRepository : BasicRepository<Product, Guid, ChainDbContext>, IProductRepository
+    public class ProductEfRepository : BasicRepository<Product, Guid>, IProductRepository
     {
-        public ProductEfRepository(ChainDbContext context) : base(context)
+        public ProductEfRepository(IUnitOfWork context) : base(context)
         {
         }
     }

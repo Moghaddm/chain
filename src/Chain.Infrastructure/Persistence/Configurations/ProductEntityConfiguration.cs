@@ -24,11 +24,14 @@ namespace Chain.Infrastructure.Persistence.Configurations
             builder.Property(x => x.FullEnglishName).HasMaxLength(80);
             builder.Property(x => x.SuggestPercent).HasMaxLength(101);
 
-            builder.HasOne<Category>().WithMany().HasForeignKey("CategoryId");
-            builder.HasOne<Company>().WithMany().HasForeignKey("CompanyId");
+            builder.HasOne<Category>().WithMany();
+            builder.HasOne<Company>().WithMany();
 
             builder.OwnsMany<Comment>(x => x.Comments);
-            builder.OwnsMany(x => x.Attachments, conf => conf.ToJson());
+            builder.OwnsOne(x => x.Attachments, conf => 
+            {
+                conf.ToJson();
+            });
         }
     }
 }

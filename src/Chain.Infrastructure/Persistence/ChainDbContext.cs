@@ -21,6 +21,7 @@ namespace Chain.Infrastructure.Persistence
         }
 
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Attachment> Attachments { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
@@ -29,20 +30,28 @@ namespace Chain.Infrastructure.Persistence
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(new ConfigurationBuilder()
+            //optionsBuilder.UseNpgsql(new ConfigurationBuilder()
+            //    .AddJsonFile("appsettings.json")
+            //    .Build()
+            //    .GetConnectionString("PostgreSQL")
+            //    , builder =>
+            //{
+            //    builder.EnableRetryOnFailure();
+            //});
+
+            optionsBuilder.UseSqlServer(new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build()
-                .GetConnectionString("PostgreSQL")
-                , builder =>
-            {
-                builder.EnableRetryOnFailure();
-            });
+                .GetConnectionString("Mssql")
+                , builder => builder.EnableRetryOnFailure());
 
             base.OnConfiguring(optionsBuilder);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Attachment>().HasNoKey();
+
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ChainDbContext).Assembly);
 
             base.OnModelCreating(modelBuilder);

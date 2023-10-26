@@ -14,14 +14,12 @@ namespace Chain.Infrastructure.Persistence
         public ChainDbContext CreateDbContext()
         {
             var optionsBuilder = new DbContextOptionsBuilder<ChainDbContext>();
-            optionsBuilder.UseNpgsql(new ConfigurationBuilder()
-                    .AddJsonFile("appsettings.json")
-                    .Build()
-                    .GetConnectionString("PostgreSQL")
-                , builder =>
-                {
-                    builder.EnableRetryOnFailure();
-                });
+
+            optionsBuilder.UseSqlServer(new ConfigurationBuilder()
+                  .AddJsonFile("appsettings.json")
+                  .Build()
+                  .GetConnectionString("Mssql")
+                  , builder => builder.EnableRetryOnFailure());
 
             return new ChainDbContext(optionsBuilder.Options);
         }
