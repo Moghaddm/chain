@@ -15,6 +15,7 @@ public sealed class Product : Entity
                    .Count() * 100 / Comments.Count();
     }
     public long Price { get; private set; }
+
     private Product()
     {
 

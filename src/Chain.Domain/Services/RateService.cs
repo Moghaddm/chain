@@ -13,7 +13,7 @@ namespace Chain.Domain.Services
     {
         public RateService() { }
 
-        public int GetAverageRate(List<Comment> comments)
+        public double GetAverageRate(List<Comment> comments)
         {
             var one = comments.Count(c => c.RateNumber == RateNumber.One);
             var two = comments.Count(c => c.RateNumber == RateNumber.Two);
@@ -21,8 +21,8 @@ namespace Chain.Domain.Services
             var four = comments.Count(c => c.RateNumber == RateNumber.Four);
             var five = comments.Count(c => c.RateNumber == RateNumber.Five);
 
-            return (1 * (int)one + 2 * (int)two + 3 * (int)three + 4 * (int)four + 5 * (int)five)
-                 / (int)(one + two + three + four + five);
+            return (double)(1 * one + 2 * two + 3 * three + 4 * four + 5 * five)
+                 / (double)(one + two + three + four + five);
         }
 
         public Rate GetPercentRateNumbers(List<Comment> comments)

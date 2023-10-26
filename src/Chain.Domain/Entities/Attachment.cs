@@ -1,55 +1,64 @@
+using System.Text.Json.Serialization;
+
 namespace Chain.Domain.Entities;
 
-public sealed class Attachment
+public sealed class Attachment 
 {
     private Attachment()
     {
         
     }
 
-    public byte[]? Image { get; private set; }
-    public string? Alt { get; private set; }
-    public string? ImageTitle { get; private set; }
-    public string PropertyName { get; private set; }
-    public List<string> PropertyValue { get; private set; }
+    public byte[]? Image { get; private set; } = default!;
+    public string? Alt { get; private set; } = default!;
+    public string? ImageTitle { get; private set; } = default!;
+    //public string PropertyName { get; private set; }
+    //public List<string> PropertyValue { get; private set; }
 
+    [JsonConstructor]
     public Attachment(
-        string propertyName,
-        List<string> propertyValue,
+        //string propertyName,
+        //List<string> propertyValue,
         byte[] image,
         string alt,
         string imageTitle
     )
     {
-        ValidateInformations(propertyName, propertyValue, image, alt, imageTitle);
+        ValidateInformation(
+            //propertyName,
+            //propertyValue, 
+            image, 
+            alt, 
+            imageTitle);
 
         Image = image;
         Alt = alt;
         ImageTitle = imageTitle;
-        PropertyName = propertyName;
-        PropertyValue = propertyValue;
+        //PropertyName = propertyName;
+        //PropertyValue = propertyValue;
     }
 
-    public Attachment(string propertyName, List<string> propertyValue)
-    {
-        if (string.IsNullOrEmpty(propertyName))
-            throw new ArgumentNullException($"Invalid {nameof(propertyName)}");
+    //public Attachment(string propertyName, List<string> propertyValue)
+    //{
+    //    if (string.IsNullOrEmpty(propertyName))
+    //        throw new ArgumentNullException($"Invalid {nameof(propertyName)}");
 
-        ValidateValues(propertyValue);
-        PropertyName = propertyName;
-        PropertyValue = propertyValue;
-    }
+    //    ValidateValues(propertyValue);
 
-    public void ValidateInformations(
-        string propertyName,
-        List<string> propertyValue,
+    //    PropertyName = propertyName;
+    //    PropertyValue = propertyValue;
+    //}
+
+    private void ValidateInformation(
+        //string propertyName,
+        //List<string> propertyValue,
         byte[] image,
         string alt,
         string imageTitle
     )
     {
-        if (string.IsNullOrEmpty(propertyName))
-            throw new ArgumentNullException($"Invalid {nameof(propertyName)}.");
+        //if (string.IsNullOrEmpty(propertyName))
+            //throw new ArgumentNullException($"Invalid {nameof(propertyName)}.");
         if (image is null)
             throw new ArgumentNullException("Invalid Image Byte Array.");
         if (string.IsNullOrEmpty(alt))
@@ -57,7 +66,7 @@ public sealed class Attachment
         if (string.IsNullOrEmpty(imageTitle))
             throw new ArgumentNullException($"Invalid {nameof(imageTitle)}.");
 
-        ValidateValues(propertyValue);
+        //ValidateValues(propertyValue);
     }
 
     private void ValidateValues(List<string> values)
@@ -66,4 +75,6 @@ public sealed class Attachment
             if (string.IsNullOrWhiteSpace(value))
                 throw new ArgumentNullException("Invalid Value");
     }
+
+    //public Product Product { get; set; }
 }

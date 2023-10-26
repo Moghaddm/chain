@@ -17,7 +17,7 @@ public sealed class Comment : Entity
 
     private Comment()
     {
-        
+
     }
 
     public Comment(
