@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Chain.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]s")]
+    [Route("api/Companies")]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
@@ -28,7 +28,7 @@ namespace Chain.Api.Controllers
         {
             var company = await _companyService.Get(id);
 
-            return Ok();
+            return Ok(company);
         }
 
         [HttpPost("[action]", Name = nameof(Create) + "Companies")]
@@ -36,6 +36,8 @@ namespace Chain.Api.Controllers
         {
             var company = await _companyService.Create(input);
 
+
+            return Ok(company);
             return CreatedAtAction(nameof(GetById) + "Companies", company);
         }
 
@@ -48,7 +50,7 @@ namespace Chain.Api.Controllers
         }
 
         [HttpDelete("{id}/[action]", Name = nameof(Delete) + "Companies")]
-        public async Task<IActionResult> Delete([FromBody] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             await _companyService.Delete(id);
 

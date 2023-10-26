@@ -31,9 +31,10 @@ namespace Chain.Api.Controllers
         [HttpPost("[action]", Name = nameof(Create) + "Categories")]
         public async Task<IActionResult> Create([FromBody] CategoryDto category)
         {
-            var categories = await _categoryService.Create(category);
+            var categoryId = await _categoryService.Create(category);
 
-            return Ok(categories);
+            return Ok(categoryId);
+            return CreatedAtAction(nameof(GetById)+"Categories",categoryId);
         }
 
         [HttpPatch("{id}/[action]", Name = nameof(Modify) + "Categories")]
@@ -55,7 +56,7 @@ namespace Chain.Api.Controllers
         [HttpGet("{id}/Products", Name = nameof(GetProducts) + "Categories")]
         public async Task<IActionResult> GetProducts([FromRoute] Guid id)
         {
-            var category = await _categoryService.Get(id);
+            var category = await _categoryService.GetCategoryProducts(id);
 
             return Ok(category);
         }

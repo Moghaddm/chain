@@ -1,4 +1,5 @@
-﻿using Chain.Application.Contract.Ports.Services;
+﻿using Chain.Application.Contract.Models;
+using Chain.Application.Contract.Ports.Services;
 using Chain.Application.Interfaces;
 using Chain.Application.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -62,6 +63,38 @@ namespace Chain.Api.Controllers
         public async Task<IActionResult> GetComments([FromRoute] Guid id)
         {
             var comments = await _commentService.GetProductComments(id);
+
+            return Ok(comments);
+        }
+
+        [HttpPost("{id}/[action]", Name = nameof(CreateComment) + "Products")]
+        public async Task<IActionResult> CreateComment([FromRoute] Guid id, [FromBody] CommentDto commentDto)
+        {
+            await _commentService.AddOnProduct(id, commentDto);
+
+            return NoContent();
+        }
+
+        [HttpPatch("{id}/[action]", Name = nameof(UpdateComment) + "Products")]
+        public async Task<IActionResult> UpdateComment([FromRoute] Guid id, [FromBody] CommentDto commentDto)
+        {
+            await _commentService.UpdateOnProduct(id, commentDto);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}/[action]/{commentId}", Name = nameof(DeleteComment) + "Products")]
+        public async Task<IActionResult> DeleteComment([FromRoute] Guid id, [FromRoute] Guid commentId)
+        {
+            await _commentService.DeleteFromProduct(commentId,id);
+
+            return NoContent();
+        }
+
+        [HttpGet("comments/{commentId}", Name = nameof(GetComment) + "Products")]
+        public async Task<IActionResult> GetComment([FromRoute] Guid id)
+        {
+            var comments = await _commentService.GetById(id);
 
             return Ok(comments);
         }
