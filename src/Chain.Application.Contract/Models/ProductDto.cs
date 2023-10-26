@@ -14,6 +14,7 @@ namespace Chain.Application.Models
         string Description,
         int Quantity,
         long Price,
+        RateModel Rate,
         CompanyDto Company,
         CategoryDto Category,
         IEnumerable<CommentDto> Comments,

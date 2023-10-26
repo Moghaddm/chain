@@ -13,7 +13,7 @@ namespace Chain.Application.Contract.Ports.Services
         Task<Guid> Create(CategoryDto categoryDto);
         Task Update(Guid id, CategoryDto categoryDto);
         Task Delete(Guid id);
-        ValueTask<CategoryShowProductsDto> Get(Guid id);
+        ValueTask<CategoryDto> Get(Guid id);
         ValueTask<IEnumerable<CategoryDto>> GetAll();
         ValueTask<IEnumerable<ProductDto>> GetCategoryProducts(Guid id);
     }
