@@ -2,6 +2,7 @@
 using Chain.Application.Contract.Ports.Services;
 using Chain.Application.Interfaces;
 using Chain.Application.Models;
+using Chain.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chain.Api.Controllers
@@ -24,7 +25,7 @@ namespace Chain.Api.Controllers
         {
             var products = await _productService.GetAll();
 
-            return Ok(products);
+            return products is not null ? Ok(products) : NotFound("There is not any products on data storage.");
         }
 
         [HttpPost("[action]", Name = nameof(Create) + "Products")]
@@ -56,7 +57,7 @@ namespace Chain.Api.Controllers
         {
             var product = await _productService.GetById(id);
 
-            return Ok(product);
+            return product is not null ? Ok(product) : NotFound("There is not any products on data storage with expected argument.");
         }
 
         [HttpGet("{id}/comments", Name = nameof(GetComments) + "Products")]
@@ -96,7 +97,7 @@ namespace Chain.Api.Controllers
         {
             var comments = await _commentService.GetById(id);
 
-            return Ok(comments);
+            return comments is not null ? Ok(comments) : NotFound("There is not any comments on data storage with expected product argument.");
         }
     }
 }
