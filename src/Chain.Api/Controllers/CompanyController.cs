@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Chain.Api.Controllers
 {
     [ApiController]
-    [Route("api/Companies")]
+    [Route("api/Company")]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
@@ -28,7 +28,7 @@ namespace Chain.Api.Controllers
         {
             var company = await _companyService.Get(id);
 
-            return Ok(company);
+            return company is null ? NotFound() : Ok(company);
         }
 
         [HttpPost("[action]", Name = nameof(Create) + "Companies")]
@@ -36,8 +36,6 @@ namespace Chain.Api.Controllers
         {
             var company = await _companyService.Create(input);
 
-
-            return Ok(company);
             return CreatedAtAction(nameof(GetById) + "Companies", company);
         }
 

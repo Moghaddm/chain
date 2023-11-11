@@ -17,7 +17,7 @@ namespace Chain.Api.Controllers
         {
             var category = await _categoryService.Get(id);
 
-            return Ok(category);
+            return category is null ? NotFound() : Ok(category);
         }
 
         [HttpGet(Name = nameof(Get) + "Categories")]
@@ -33,8 +33,7 @@ namespace Chain.Api.Controllers
         {
             var categoryId = await _categoryService.Create(category);
 
-            return Ok(categoryId);
-            return CreatedAtAction(nameof(GetById)+"Categories",categoryId);
+            return CreatedAtAction(nameof(GetById) + "Categories", categoryId);
         }
 
         [HttpPatch("{id}/[action]", Name = nameof(Modify) + "Categories")]
@@ -58,7 +57,7 @@ namespace Chain.Api.Controllers
         {
             var category = await _categoryService.GetCategoryProducts(id);
 
-            return Ok(category);
+            return category is null ? NotFound() : Ok(category);
         }
     }
 }

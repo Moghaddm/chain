@@ -12,6 +12,18 @@ namespace Chain.Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Attachments",
+                columns: table => new
+                {
+                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Alt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageTitle = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Categories",
                 columns: table => new
                 {
@@ -65,8 +77,6 @@ namespace Chain.Infrastructure.Persistence.Migrations
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SuggestPercent = table.Column<double>(type: "float", maxLength: 101, nullable: false),
                     Price = table.Column<long>(type: "bigint", nullable: false),
-                    CategoryId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CompanyId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ConcurrencyStamp = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Attachments = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -80,38 +90,9 @@ namespace Chain.Infrastructure.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_Categories_CategoryId1",
-                        column: x => x.CategoryId1,
-                        principalTable: "Categories",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Products_Companies_CompanyId",
                         column: x => x.CompanyId,
                         principalTable: "Companies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Products_Companies_CompanyId1",
-                        column: x => x.CompanyId1,
-                        principalTable: "Companies",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Attachments",
-                columns: table => new
-                {
-                    Image = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Alt = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ImageTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.ForeignKey(
-                        name: "FK_Attachments_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -145,29 +126,14 @@ namespace Chain.Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attachments_ProductId",
-                table: "Attachments",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_CategoryId1",
-                table: "Products",
-                column: "CategoryId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Products_CompanyId",
                 table: "Products",
                 column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_CompanyId1",
-                table: "Products",
-                column: "CompanyId1");
         }
 
         /// <inheritdoc />

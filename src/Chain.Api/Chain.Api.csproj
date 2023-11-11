@@ -7,7 +7,7 @@
     <UserSecretsId>d7a215e4-5936-4bf2-a1cb-642a318e362e</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..</DockerfileContext>
-	  <DockerfileFile>..\..\Dockerfile</DockerfileFile>
+	  <DockerfileFile>Dockerfile</DockerfileFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Chain.Application.Contract\Chain.Application.Contract.csproj" />
     <ProjectReference Include="..\Chain.Application\Chain.Application.csproj" />
     <ProjectReference Include="..\Chain.Infrastructure\Chain.Infrastructure.csproj" />
   </ItemGroup>
