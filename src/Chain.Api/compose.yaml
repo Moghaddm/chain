@@ -1,0 +1,10 @@
+services:
+  server:
+    build:
+      context: ../../
+      dockerfile: src/Chain.Api/Dockerfile
+      target: final
+    ports:
+      - 8080:80
+    # network_mode: host
+        

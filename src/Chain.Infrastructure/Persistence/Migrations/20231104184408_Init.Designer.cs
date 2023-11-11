@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chain.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ChainDbContext))]
-    [Migration("20231026085141_RemoveProductPropsFromAttachment")]
-    partial class RemoveProductPropsFromAttachment
+    [Migration("20231104184408_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -87,13 +87,7 @@ namespace Chain.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CompanyId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ConcurrencyStamp")
@@ -129,11 +123,7 @@ namespace Chain.Infrastructure.Persistence.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("CategoryId1");
-
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("CompanyId1");
 
                     b.ToTable("Products");
                 });
@@ -168,19 +158,11 @@ namespace Chain.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Chain.Domain.Entities.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoryId1");
-
                     b.HasOne("Chain.Domain.Entities.Company", "Company")
                         .WithMany("Products")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Chain.Domain.Entities.Company", null)
-                        .WithMany()
-                        .HasForeignKey("CompanyId1");
 
                     b.OwnsMany("Chain.Domain.Entities.Comment", "Comments", b1 =>
                         {
