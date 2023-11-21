@@ -25,81 +25,59 @@ namespace Chain.Application.Services
 
         public async Task AddOnProduct(Guid productId, CommentDto commentDto)
         {
-            try
-            {
-                var product = await _productRepository.GetByIdAsync(productId);
+            var product = await _productRepository.GetByIdAsync(productId);
 
-                Comment comment = new(commentDto.WriterAlias,
-                    commentDto.Title,
-                    commentDto.Description,
-                    commentDto.Gmail,
-                    commentDto.Suggest,
-                    commentDto.DateTimeCommented,
-                    commentDto.RateNumber);
+            Comment comment = new(commentDto.WriterAlias,
+                commentDto.Title,
+                commentDto.Description,
+                commentDto.Gmail,
+                commentDto.Suggest,
+                commentDto.DateTimeCommented,
+                commentDto.RateNumber);
 
-                comment.Product = product;
+            comment.Product = product;
 
-                product.Comments.Add(comment);
+            product.Comments.Add(comment);
 
-                await _unitOfWork.SaveChangesAsync();
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-
-                throw;
-            }
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task DeleteFromProduct(Guid id, Guid productId)
         {
-            try
-            {
-                var product = await _productRepository.GetByIdAsync(productId);
+            var product = await _productRepository.GetByIdAsync(productId);
 
-                var comment = await _commentRepository.GetByIdAsync(id);
+            var comment = await _commentRepository.GetByIdAsync(id);
 
-                product.Comments.Remove(comment!);
+            product.Comments.Remove(comment!);
 
-                await _unitOfWork.SaveChangesAsync();
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-
-                throw;
-            }
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateOnProduct(Guid id, CommentDto commentDto)
         {
-            try
-            {
-                var comment = await _commentRepository.GetByIdAsync(id);
+            var comment = await _commentRepository.GetByIdAsync(id);
 
-                comment.Update(commentDto.WriterAlias,
-                    commentDto.Title,
-                    commentDto.Description,
-                    commentDto.Gmail,
-                    commentDto.Suggest,
-                    commentDto.DateTimeCommented,
-                    commentDto.RateNumber);
+            comment.Update(commentDto.WriterAlias,
+                commentDto.Title,
+                commentDto.Description,
+                commentDto.Gmail,
+                commentDto.Suggest,
+                commentDto.DateTimeCommented,
+                commentDto.RateNumber);
 
-                await _unitOfWork.SaveChangesAsync();
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-
-                throw;
-            }
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        public async ValueTask<CommentDto> GetById(Guid id)
+        public async ValueTask<CommentDto> Get(Guid id)
         {
             var comment = await _commentRepository.GetByIdAsync(id);
 
-            CommentDto commentDto = new(comment.WriterAlias,
+            if (comment is null)
+                return null;
+
+            CommentDto commentDto = new(
+                comment!.Id,
+                comment.WriterAlias,
                 comment.Title,
                 comment.Description,
                 comment.Gmail,
@@ -116,8 +94,12 @@ namespace Chain.Application.Services
         {
             var product = await _productRepository.GetByIdAsync(productId);
 
-            return product.Comments.Select(c
-                => new CommentDto(
+            if (product is null)
+                return Enumerable.Empty<CommentDto>();
+
+            return product.Comments.Select(
+                c => new CommentDto(
+                c.Id,
                 c.WriterAlias,
                 c.Title,
                 c.Description,

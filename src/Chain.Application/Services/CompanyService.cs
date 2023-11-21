@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Chain.Application.Contract.Ports.Repositories;
 using Chain.Application.Contract.Ports.Services;
 using Chain.Application.Models;
 using Chain.Domain.Entities;
+using Microsoft.AspNetCore.Http.Internal;
 
 namespace Chain.Application.Services
 {
@@ -52,29 +54,40 @@ namespace Chain.Application.Services
         {
             var company = await _companyRepository.GetByIdAsync(id);
 
-            return new CompanyDto(company!.Name);
+            if (company is null)
+                return null;
+
+            return new CompanyDto(company!.Id, company!.Name);
         }
 
         public async ValueTask<IEnumerable<CompanyDto>> GetAll()
         {
             var companies = await _companyRepository.GetAsync();
 
-            return companies.Select(c => new CompanyDto(c!.Name));
+            if (companies is null)
+                return Enumerable.Empty<CompanyDto>();
+
+            return companies.Select(c => new CompanyDto(c!.Id, c!.Name));
         }
 
         public async ValueTask<IEnumerable<ProductDto>> GetCompanyProducts(Guid id)
         {
             var company = await _companyRepository.GetByIdAsync(id);
 
-            return company.Products.Select(p => new ProductDto(
-                p.Name,
-                p.FullEnglishName,
-                p.Description,
-                p.Quantity,
-                p.Price,
-                new CompanyDto(p.Company.Name),
-                new CategoryDto(p.Category.Title, p.Category.LimitOrder),
-                p.Attachments));
+            if (company is null)
+                return Enumerable.Empty<ProductDto>();
+
+            using (var memoryStream = new MemoryStream())
+                return company.Products.Select(p => new ProductDto(
+                    p.Id,
+                    p.Name,
+                    p.FullEnglishName,
+                    p.Description,
+                    p.Quantity,
+                    p.Price,
+                    new CompanyDto(p.Company.Id, p.Company.Name),
+                    new CategoryDto(p.Category.Id, p.Category.Title, p.Category.LimitOrder),
+                    p.Attachments.Select(a => new AttachmentDto(new FormFile(memoryStream, 0, a.Image.Length, null, a.ImageTitle), a.ImageMimeType, a.Alt, a.ImageTitle)).ToList()));
         }
     }
 }

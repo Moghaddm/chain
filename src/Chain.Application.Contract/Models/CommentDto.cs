@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace Chain.Application.Contract.Models
 {
     public record CommentDto(
+        Guid id,
         string WriterAlias,
         string Title, 
         string Description, 

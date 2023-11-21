@@ -10,8 +10,8 @@ namespace Chain.Application.Interfaces
     public interface IProductService
     {
         Task<Guid> Create(CreateEditProductDto createProductDto);
-        ValueTask<List<ProductDto>> GetAll();
-        ValueTask<OneProductDto> GetById(Guid id);
+        ValueTask<IEnumerable<ProductDto>> GetAll();
+        ValueTask<OneProductDto> Get(Guid id);
         Task Delete(Guid id);
         Task Update(Guid id, CreateEditProductDto editProductDto);
         Task UpdateCompany(Guid id, Guid companyId);

@@ -2,71 +2,50 @@ using System.Text.Json.Serialization;
 
 namespace Chain.Domain.Entities;
 
-public sealed class Attachment 
+public sealed class Attachment
 {
-    private Attachment()
-    {
-        
-    }
+    private Attachment() { }
 
     public byte[]? Image { get; private set; } = default!;
+    public string ImageMimeType { get; private set; } = default!;
     public string? Alt { get; private set; } = default!;
     public string? ImageTitle { get; private set; } = default!;
-    //public string PropertyName { get; private set; }
-    //public List<string> PropertyValue { get; private set; }
 
     [JsonConstructor]
     public Attachment(
-        //string propertyName,
-        //List<string> propertyValue,
         byte[] image,
         string alt,
-        string imageTitle
+        string imageTitle,
+        string imageMimeType
     )
     {
         ValidateInformation(
-            //propertyName,
-            //propertyValue, 
-            image, 
-            alt, 
-            imageTitle);
+            image,
+            alt,
+            imageTitle,
+            imageMimeType);
 
         Image = image;
+        ImageMimeType = imageMimeType;
         Alt = alt;
         ImageTitle = imageTitle;
-        //PropertyName = propertyName;
-        //PropertyValue = propertyValue;
     }
 
-    //public Attachment(string propertyName, List<string> propertyValue)
-    //{
-    //    if (string.IsNullOrEmpty(propertyName))
-    //        throw new ArgumentNullException($"Invalid {nameof(propertyName)}");
-
-    //    ValidateValues(propertyValue);
-
-    //    PropertyName = propertyName;
-    //    PropertyValue = propertyValue;
-    //}
-
     private void ValidateInformation(
-        //string propertyName,
-        //List<string> propertyValue,
         byte[] image,
         string alt,
-        string imageTitle
+        string imageTitle,
+        string imageMimeType
     )
     {
-        //if (string.IsNullOrEmpty(propertyName))
-            //throw new ArgumentNullException($"Invalid {nameof(propertyName)}.");
         if (image is null)
             throw new ArgumentNullException("Invalid Image Byte Array.");
         if (string.IsNullOrEmpty(alt))
             throw new ArgumentNullException($"Invalid {nameof(alt)}.");
         if (string.IsNullOrEmpty(imageTitle))
             throw new ArgumentNullException($"Invalid {nameof(imageTitle)}.");
-
-        //ValidateValues(propertyValue);
+        if (string.IsNullOrEmpty(imageMimeType))
+            throw new ArgumentNullException($"Invalid {nameof(imageMimeType)}.");
     }
 
     private void ValidateValues(List<string> values)
@@ -76,5 +55,5 @@ public sealed class Attachment
                 throw new ArgumentNullException("Invalid Value");
     }
 
-    //public Product Product { get; set; }
+    public Guid ProductId  { get; set; }
 }

@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Chain.Application.Contract.Models
 {
-    public record CompanyDto(string Name);
+    public record CompanyDto(Guid id,string Name);
 }

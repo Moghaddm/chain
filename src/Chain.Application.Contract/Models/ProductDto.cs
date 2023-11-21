@@ -9,6 +9,7 @@ using Chain.Domain.Entities;
 namespace Chain.Application.Models
 {
     public record OneProductDto(
+        Guid id,
         string Name,
         string FullEnglishName,
         string Description,
@@ -18,9 +19,10 @@ namespace Chain.Application.Models
         CompanyDto Company,
         CategoryDto Category,
         IEnumerable<CommentDto> Comments,
-        List<Attachment> Attachments);
+        List<AttachmentDto> Attachments);
 
     public record ProductDto(
+        Guid id,
         string Name,
         string FullEnglishName,
         string Description,
@@ -28,7 +30,7 @@ namespace Chain.Application.Models
         long Price,
         CompanyDto Company,
         CategoryDto Category,
-        List<Attachment> Attachments);
+        List<AttachmentDto> Attachments);
 
     public record CreateEditProductDto(
         string Name,
@@ -38,5 +40,5 @@ namespace Chain.Application.Models
         long Price,
         Guid CompanyId,
         Guid CategoryId,
-        List<Attachment> Attachments);
+        List<AttachmentDto> Attachments);
 }

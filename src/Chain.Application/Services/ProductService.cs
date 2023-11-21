@@ -10,13 +10,14 @@ using Chain.Application.Interfaces;
 using Chain.Application.Models;
 using Chain.Domain.Entities;
 using Chain.Domain.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 
 namespace Chain.Application.Services
 {
     public class ProductService : IProductService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ICommentRepository _commentRepository;
         private readonly ICompanyRepository _companyRepository;
         private readonly IProductRepository _productRepository;
         private readonly ICategoryRepository _categoryRepository;
@@ -25,74 +26,92 @@ namespace Chain.Application.Services
             IProductRepository productRepository,
             IUnitOfWork unitOfWork,
             ICategoryRepository categoryRepository,
-            ICompanyRepository companyRepository,
-            ICommentRepository commentRepository)
-            => (_productRepository, _unitOfWork, _categoryRepository, _companyRepository, _commentRepository)
-                = (productRepository, unitOfWork, categoryRepository, companyRepository, commentRepository);
+            ICompanyRepository companyRepository)
+            => (_productRepository, _unitOfWork, _categoryRepository, _companyRepository)
+                = (productRepository, unitOfWork, categoryRepository, companyRepository);
 
         public async Task<Guid> Create(CreateEditProductDto createProductDto)
         {
-            try
-            {
-                var category = await _categoryRepository.GetByIdAsync(createProductDto.CategoryId);
+            var category = await _categoryRepository.GetByIdAsync(createProductDto.CategoryId);
 
-                var company = await _companyRepository.GetByIdAsync(createProductDto.CompanyId);
+            var company = await _companyRepository.GetByIdAsync(createProductDto.CompanyId);
 
-                Product product = new(createProductDto.Name,
-                    createProductDto.FullEnglishName,
-                    createProductDto.Description,
-                    createProductDto.Price,
-                    createProductDto.Quantity,
-                    company,
-                    category,
-                    createProductDto.Attachments);
+            Product product = new(createProductDto.Name,
+                 createProductDto.FullEnglishName,
+                 createProductDto.Description,
+                 createProductDto.Price,
+                 createProductDto.Quantity,
+                 company,
+                 category,
+                 createProductDto.Attachments.Select(a =>
+                 {
+                     using (var memoryStream = new MemoryStream())
+                     {
+                         a.Image.CopyTo(memoryStream);
+                         return new Attachment(memoryStream.ToArray(), a.Alt!, a.ImageTitle!, a.ImageMimeType);
+                     }
+                 }).ToList());
 
-                var productCreate = await _productRepository.CreateAsync(product);
+            var productCreate = await _productRepository.CreateAsync(product);
 
-                await _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
 
-                return productCreate;
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-
-                throw;
-            }
+            return productCreate;
         }
 
-        public async ValueTask<List<ProductDto>> GetAll()
+        public async ValueTask<IEnumerable<ProductDto>> GetAll()
         {
             var products = await _productRepository.GetAsync();
 
-            return products.Select(p => new ProductDto(p.Name,
+            if (products is null)
+                return Enumerable.Empty<ProductDto>();
+
+            return products.Select(p => new ProductDto(
+                p.Id,
+                p.Name,
                 p.FullEnglishName,
                 p.Description,
                 p.Quantity,
                 p.Price,
-                new CompanyDto(p.Company.Name),
-                new CategoryDto(p.Category.Title, p.Category.LimitOrder),
-                p.Attachments)).ToList();
+                new CompanyDto(p.Company.Id, p.Company.Name),
+                new CategoryDto(p.Category.Id, p.Category.Title, p.Category.LimitOrder),
+                p.Attachments.Select(a =>
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        var attachment = new AttachmentDto(new FormFile(memoryStream, 0, a.Image.Length, null, a.ImageTitle), a.ImageMimeType, a.Alt, a.ImageTitle);
+
+                        return attachment;
+                    }
+                }).ToList()));
         }
 
-        public async ValueTask<OneProductDto> GetById(Guid id)
+        public async ValueTask<OneProductDto> Get(Guid id)
         {
             var rateService = new RateService();
 
             var product = await _productRepository.GetByIdAsync(id);
 
+            if (product is null)
+                return null;
+
             var comments = product.Comments;
 
+            if (comments is null)
+                comments = Enumerable.Empty<Comment>().ToList();
+
             var productDto = new OneProductDto(
+                product.Id,
                 product.Name,
                 product.FullEnglishName,
                 product.Description,
                 product.Quantity,
                 product.Price,
                 new RateModel(rateService.GetAverageRate(comments), rateService.GetPercentRateNumbers(comments)),
-                new CompanyDto(product.Company.Name),
-                new CategoryDto(product.Category.Title, product.Category.LimitOrder),
+                new CompanyDto(product.Company.Id, product.Company.Name),
+                new CategoryDto(product.Category.Id, product.Category.Title, product.Category.LimitOrder),
                 comments.Select(c => new CommentDto(
+                c.Id,
                 c.WriterAlias,
                 c.Title,
                 c.Description,
@@ -102,27 +121,26 @@ namespace Chain.Application.Services
                 c.VoteUps,
                 c.VoteDowns,
                 c.RateNumber)),
-                product.Attachments);
+                product.Attachments.Select(a =>
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        var attachment = new AttachmentDto(new FormFile(memoryStream, 0, a.Image.Length, null, a.ImageTitle), a.ImageMimeType, a.Alt, a.ImageTitle);
+
+                        return attachment;
+                    }
+                }).ToList());
 
             return productDto;
         }
 
         public async Task Delete(Guid id)
         {
-            try
-            {
-                var product = await _productRepository.GetByIdAsync(id);
+            var product = await _productRepository.GetByIdAsync(id);
 
-                await _productRepository.RemoveAsync(product);
+            await _productRepository.RemoveAsync(product);
 
-                await _unitOfWork.SaveChangesAsync();
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-
-                throw;
-            }
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateCompany(Guid id, Guid companyId)
@@ -149,25 +167,16 @@ namespace Chain.Application.Services
 
         public async Task Update(Guid id, CreateEditProductDto editProductDto)
         {
-            try
-            {
-                var product = await _productRepository.GetByIdAsync(id);
+            var product = await _productRepository.GetByIdAsync(id);
 
-                product.UpdateProduct(
-                    editProductDto.Name,
-                    editProductDto.FullEnglishName,
-                    editProductDto.Description,
-                    editProductDto.Price,
-                    editProductDto.Quantity);
+            product.UpdateProduct(
+                editProductDto.Name,
+                editProductDto.FullEnglishName,
+                editProductDto.Description,
+                editProductDto.Price,
+                editProductDto.Quantity);
 
-                await _unitOfWork.SaveChangesAsync();
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-
-                throw;
-            }
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

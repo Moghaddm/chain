@@ -13,7 +13,7 @@ namespace Chain.Application.Contract.Ports.Services
         Task AddOnProduct(Guid productId, CommentDto comment);
         Task DeleteFromProduct(Guid id,Guid productId);
         Task UpdateOnProduct(Guid id, CommentDto comment);
-        ValueTask<CommentDto> GetById(Guid id);
+        ValueTask<CommentDto> Get(Guid id);
         ValueTask<IEnumerable<CommentDto>> GetProductComments(Guid productId);
     }
 }

@@ -7,6 +7,6 @@ using Chain.Application.Models;
 
 namespace Chain.Application.Contract.Models
 {
-    public record CategoryDto(string Title, int LimitOrder);
-    public record CategoryShowProductsDto(string Title, int LimitOrder,IEnumerable<ProductDto> Products);
+    public record CategoryDto(Guid id, string Title, int LimitOrder);
+    public record CategoryShowProductsDto(Guid id, string Title, int LimitOrder,IEnumerable<ProductDto> Products);
 }

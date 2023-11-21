@@ -21,7 +21,7 @@ namespace Chain.Infrastructure.Persistence
         }
 
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<Attachment> Attachments { get; set; }
+        //public virtual DbSet<Attachment> Attachments { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
